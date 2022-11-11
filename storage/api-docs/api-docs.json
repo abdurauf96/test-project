@@ -1,0 +1,40 @@
+{
+    "openapi": "3.0.0",
+    "info": {
+        "title": "Library project",
+        "description": "Test project",
+        "contact": {
+            "email": "saydaliyevabdurauf@gmail.com"
+        },
+        "version": "1.0.0"
+    },
+    "servers": [
+        {
+            "url": "http://localhost:8000/api",
+            "description": "Demo API Server"
+        }
+    ],
+    "paths": {
+        "/books": {
+            "get": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "Get list of books",
+                "description": "Get list of books",
+                "operationId": "getBooks",
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
+                    }
+                }
+            }
+        }
+    },
+    "tags": [
+        {
+            "name": "Books",
+            "description": "API Endpoints of Books"
+        }
+    ]
+}
