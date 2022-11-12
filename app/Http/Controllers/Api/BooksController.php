@@ -98,7 +98,6 @@ class BooksController extends Controller
 
         }
 
-
     }
 
     /**
@@ -112,7 +111,49 @@ class BooksController extends Controller
         //
     }
 
+
     /**
+     *   @OA\Put(
+     *   path="/books/{id}",
+     *   summary="update book",
+     *   description="update book",
+     *   operationId="updateBook",
+     *   tags={"Books"},
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          description="book id",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *      required=true,
+     *      description=" ** send new book name and new authors_id ",
+     *         @OA\JsonContent(
+     *              @OA\Property( property="book_name", type="string"),
+     *              @OA\Property( property="authors_id", example="[1,2]"),
+     *          ) ,
+     *      ),
+     *      @OA\Response(
+     *        response=404,
+     *        description="Book not found",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="success", type="boolean", example=false),
+     *              @OA\Property(property="message", type="string", example="Sorry, book not found"),
+     *          )
+     *      ),
+     *      @OA\Response(
+     *        response=200,
+     *        description="Book updated",
+     *          @OA\JsonContent(
+     *              @OA\Property(property="success", type="boolean", example=true),
+     *              @OA\Property(property="message", type="string", example="Book updated successfully"),
+     *          )
+     *      ),
+     *
+     *   )
      * Update the specified resource in storage.
      *
      * @param  \Illuminate\Http\Request  $request
@@ -121,7 +162,19 @@ class BooksController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        
+        $book=Book::find($id);
+
+        if(!$book){
+            return response(['success'=>false, 'message'=>'Sorry, book not found'], 404);
+        }
+        
+        $book->update(['name'=>$request->book_name]);
+
+        $book->authors()->sync($request->authors_id);
+    
+        return response(['success'=>true, 'message'=>'Book updated successfully'], 200);
+
     }
     /**
      * 
