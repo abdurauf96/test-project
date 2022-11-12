@@ -28,6 +28,83 @@
                         "description": "Successful operation"
                     }
                 }
+            },
+            "post": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "store book",
+                "description": "store book",
+                "operationId": "storeBook",
+                "requestBody": {
+                    "description": "1. if you want to add an existing book then send the only book id and publisher id !<br>2. if you want to add a new book don't send book_id, then send only book_name,publisher_id and book's authors_id as array",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "book_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    },
+                                    "publisher_id": {
+                                        "type": "integer",
+                                        "example": "1"
+                                    },
+                                    "book_name": {
+                                        "type": "string"
+                                    },
+                                    "authors_id": {
+                                        "example": "[1,2]"
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "404": {
+                        "description": "Book not found",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": false
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Sorry, book not found"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    },
+                    "200": {
+                        "description": "Book stored",
+                        "content": {
+                            "application/json": {
+                                "schema": {
+                                    "properties": {
+                                        "success": {
+                                            "type": "boolean",
+                                            "example": true
+                                        },
+                                        "message": {
+                                            "type": "string",
+                                            "example": "Book stored successfully"
+                                        }
+                                    },
+                                    "type": "object"
+                                }
+                            }
+                        }
+                    }
+                }
             }
         }
     },
