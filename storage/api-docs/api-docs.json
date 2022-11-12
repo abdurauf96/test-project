@@ -37,7 +37,7 @@
                 "description": "store book",
                 "operationId": "storeBook",
                 "requestBody": {
-                    "description": "1. if you want to add an existing book then send the only book id and publisher id !<br>2. if you want to add a new book don't send book_id, then send only book_name,publisher_id and book's authors_id as array",
+                    "description": " ** if we will use api with authentication, we don't need to send publisher_id <br>1. if you want to add an existing book then send the only book id and publisher id !<br>2. if you want to add a new book don't send book_id, then send only book_name,publisher_id and book's authors_id as array",
                     "required": true,
                     "content": {
                         "application/json": {
@@ -103,6 +103,49 @@
                                 }
                             }
                         }
+                    }
+                }
+            }
+        },
+        "/books/{id}": {
+            "delete": {
+                "tags": [
+                    "Books"
+                ],
+                "summary": "delete books",
+                "description": "delete books for publishers",
+                "operationId": "deleteBooks",
+                "parameters": [
+                    {
+                        "name": "id",
+                        "in": "path",
+                        "description": "book id",
+                        "required": true,
+                        "schema": {
+                            "type": "integer"
+                        }
+                    }
+                ],
+                "requestBody": {
+                    "description": "if we will use api with authentication, we wouldn't send publisher_id",
+                    "required": true,
+                    "content": {
+                        "application/json": {
+                            "schema": {
+                                "properties": {
+                                    "publisher_id": {
+                                        "type": "integer",
+                                        "example": 1
+                                    }
+                                },
+                                "type": "object"
+                            }
+                        }
+                    }
+                },
+                "responses": {
+                    "200": {
+                        "description": "Successful operation"
                     }
                 }
             }

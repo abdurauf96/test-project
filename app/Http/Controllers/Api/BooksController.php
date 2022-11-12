@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Http\Resources\BookCollection;
 use App\Models\Book;
+use App\Models\Publisher;
 
 class BooksController extends Controller
 {
@@ -41,7 +42,7 @@ class BooksController extends Controller
      *   tags={"Books"},
      *      @OA\RequestBody(
      *      required=true,
-     *      description="1. if you want to add an existing book then send the only book id and publisher id !<br>2. if you want to add a new book don't send book_id, then send only book_name,publisher_id and book's authors_id as array",
+     *      description=" ** if we will use api with authentication, we don't need to send publisher_id <br>1. if you want to add an existing book then send the only book id and publisher id !<br>2. if you want to add a new book don't send book_id, then send only book_name,publisher_id and book's authors_id as array",
      *         @OA\JsonContent(
      *              @OA\Property(
      *                  property="book_id", type="integer", example=1
@@ -122,15 +123,54 @@ class BooksController extends Controller
     {
         //
     }
-
     /**
+     * 
      * Remove the specified resource from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
+     *  
+     * @OA\Delete(
+     *      path="/books/{id}",
+     *      operationId="deleteBooks",
+     *      tags={"Books"},
+     *      summary="delete books",
+     *      description="delete books for publishers",
+     *      @OA\Parameter(
+     *          name="id",
+     *          in="path",
+     *          required=true,
+     *          description="book id",
+     *          @OA\Schema(
+     *              type="integer"
+     *          )
+     *      ),
+     *      @OA\RequestBody(
+     *          required=true,
+     *          description="if we will use api with authentication, we wouldn't send publisher_id",
+     *         @OA\JsonContent(
+     *              @OA\Property(
+     *                  property="publisher_id", type="integer", example=1
+     *              ),
+     *          ) ,
+     *      ),
+     *      @OA\Response(
+     *          response=200,
+     *          description="Successful operation",
+     *       )
+     *     )
      */
-    public function destroy($id)
+
+    public function destroy($book_id)
     {
-        //
+        $publisher=Publisher::find(request()->publisher_id);
+        /*
+            if we will use api with authentication, in that case $publisher will be equal to $request->user(), 
+            $publisher=request()->user();
+        */
+        $publisher->books()->detach($book_id);
+
+        return response(['success'=>true, 'message'=>'Book deleted from publisher'], 200);
+        
     }
 }
